@@ -10,12 +10,16 @@
 
     <div class="value-section">
       <span class="label">Value</span>
-      <div class="value-stepper">
+      <div class="value-stepper" :class="{ focused: isFocused, hover: isHovered }">
         <button @click="decrement" :disabled="isMinusDisabled">-</button>
         <input 
           v-model="displayValue" 
           @blur="onBlur"
           @input="onInput"
+          @focus="isFocused = true"
+          @blur.capture="isFocused = false"
+          @mouseenter="isHovered = true"
+          @mouseleave="isHovered = false"
         />
         <button @click="increment" :disabled="isPlusDisabled">+</button>
       </div>
@@ -29,6 +33,8 @@ import { ref, computed, watch } from 'vue'
 const unit = ref('%')
 const value = ref(1.0)
 const displayValue = ref(value.value.toString())
+const isFocused = ref(false)
+const isHovered = ref(false)
 
 const isMinusDisabled = computed(() => {
   return parseFloat(displayValue.value) === 0
@@ -169,6 +175,19 @@ const decrement = () => {
   width: 60px;
   font-size: 16px;
   outline: none;
+}
+.unit-toggle button:hover,
+.value-stepper button:hover {
+  background-color: #3c3c3c;
+}
+
+.value-stepper.focused {
+  border: 1px solid #6666ff;
+  box-shadow: 0 0 0 2px rgba(102, 102, 255, 0.4);
+  background-color: #121212;
+}
+.hover {
+  background-color: #3c3c3c;
 }
 
 </style>
